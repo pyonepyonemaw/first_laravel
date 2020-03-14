@@ -1,12 +1,18 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Category;
 use App\Receipe;
 use Illuminate\Http\Request;
 
 class ReceipeController extends Controller
 {
+    public function __construct()
+    {
+        //except
+        //only
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +20,10 @@ class ReceipeController extends Controller
      */
     public function index()
     {
-        $data = Receipe::all();
+        //author_id == auth()->id
+        $data = Receipe::where('author_id',auth()->id())->get();
+        // dd(auth()->user()->id);
+        //dd(auth()->check());
         return view("home",compact('data'));
     }
 
@@ -25,7 +34,8 @@ class ReceipeController extends Controller
      */
     public function create()
     {
-         return view('create');
+        $category = Category::all();
+        return view('create',compact('category'));
     }
 
     /**
@@ -36,28 +46,14 @@ class ReceipeController extends Controller
      */
     public function store()
     {
-        // dd(request()->all());
+        //dd(request()->all());
         $validatedData = request()->validate([
         'name' => 'required',
-        'ingredients' => 'required',
+        'ingredient' => 'required',
         'category' => 'required',
         ]);
 
-        // $receipe = new Receipe();
-        // $receipe->name = request()->name;
-        // $receipe->ingredients = request()->ingredients;
-        // $receipe->category = request()->category;
-        // $receipe->save();
-
-        // dd(request()->all());
-        // Receipe::create(request()->all());
-        Receipe::create($validatedData);
-
-        // Receipe::create([
-        //     'name' => request()->name,
-        //     'ingredients' => request()->ingredients,
-        //     'category' => request()->category
-        // ]);
+        Receipe::create($validatedData + ['author_id' => auth()->id()]);
 
         return redirect('receipe');
     }
@@ -70,6 +66,11 @@ class ReceipeController extends Controller
      */
     public function show(Receipe $receipe)
     {
+        // if($receipe->author_id != auth()->id()){
+        //     abort(404);
+        // }
+        // dd($receipe->categories->name);
+        $this->authorize('view',$receipe);
         return view('show',compact('receipe'));
     }
 
@@ -81,8 +82,9 @@ class ReceipeController extends Controller
      */
     public function edit(Receipe $receipe)
     {
-        // dd($receipe);
-        return view('edit',compact('receipe'));
+        $this->authorize('view',$receipe);
+        $category = Category::all();
+        return view('edit',compact('receipe','category'));
     }
 
     /**
@@ -94,20 +96,14 @@ class ReceipeController extends Controller
      */
     public function update(Receipe $receipe)
     {
-        
+        $this->authorize('view',$receipe);
         $validatedData = request()->validate([
         'name' => 'required',
-        'ingredients' => 'required',
+        'ingredient' => 'required',
         'category' => 'required',
         ]);
-        // dd($receipe);
-        // $receipe->update(request()->all());
+
         $receipe->update($validatedData);
-        // $receipe = Receipe::find($receipe->id);
-        // $receipe->name = request()->name;
-        // $receipe->ingredients = request()->ingredients;
-        // $receipe->category = request()->category;
-        // $receipe->save();
 
         return redirect('receipe');
     }
@@ -120,6 +116,7 @@ class ReceipeController extends Controller
      */
     public function destroy(Receipe $receipe)
     {
+        $this->authorize('view',$receipe);
         $receipe->delete();
         return redirect('receipe');
     }   

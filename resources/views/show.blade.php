@@ -3,8 +3,8 @@
 @section("content")
 <div class="container">
 	<h2>{{ $receipe->name }}</h2>
-	<li>Ingredients - {{ $receipe->ingredients }}</li>
-	<li>Category - {{ $receipe->category }}</li>
+	<li>Ingredients - {{ $receipe->ingredient }}</li>
+	<li>Category - {{ $receipe->categories->name }}</li>
 
 	<a href="/receipe/{{$receipe->id}}/edit"><button class="btn btn-secondary">Edit</button></a>
 
