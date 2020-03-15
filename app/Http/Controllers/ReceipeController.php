@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 use App\Category;
+use App\Mail\ReceipeStore;
 use App\Receipe;
-use Illuminate\Http\Request;
 use App\test;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 class ReceipeController extends Controller
 {
     public function __construct()
@@ -50,8 +52,7 @@ class ReceipeController extends Controller
         'category' => 'required',
         ]);
 
-        Receipe::create($validatedData + ['author_id' => auth()->id()]);
-        session()->flash("message",'Receipe has created successfully!');
+        $receipe = Receipe::create($validatedData + ['author_id' => auth()->id()]);
         return redirect('receipe');
     }
 
@@ -61,7 +62,7 @@ class ReceipeController extends Controller
      * @param  \App\Receipe  $receipe
      * @return \Illuminate\Http\Response
      */
-    public function show(Receipe $receipe, test $test)
+    public function show(Receipe $receipe)
     {
         // dd(app('test'));
         // dd($test);
@@ -99,7 +100,6 @@ class ReceipeController extends Controller
         ]);
 
         $receipe->update($validatedData);
-        session()->flash("message",'Receipe has updated successfully!');
         return redirect('receipe');
     }
 
@@ -113,7 +113,6 @@ class ReceipeController extends Controller
     {
         $this->authorize('view',$receipe);
         $receipe->delete();
-        session()->flash("message",'Receipe has deleted successfully!');
         return redirect('receipe');
     }   
 

@@ -18,9 +18,9 @@ use App\Receipe;
 // app()->bind('test',function(){
 // 	return new \App\test;
 // });
-Route::get('/',function(){
-	dd(app('test'));
-});
+// Route::get('/',function(){
+// 	dd(app('test'));
+// });
 Route::resource('receipe', 'ReceipeController');
 Route::get('home','HomeController@index');
 Auth::routes();
