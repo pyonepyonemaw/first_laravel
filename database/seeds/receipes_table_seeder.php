@@ -15,6 +15,7 @@ class receipes_table_seeder extends Seeder
             'name' => 'Ramen',
             'ingredient' => 'salt,noodles,meat',
             'category' => 'Japanese Food',
+            'author_id' => '1',
         ]);
     }
 }

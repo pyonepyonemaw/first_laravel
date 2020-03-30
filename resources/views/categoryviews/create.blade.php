@@ -3,7 +3,7 @@
 @section("content")
 
 <div class="container">
-	<h2>Add New Receipe</h2>
+	<h2>Add New Category</h2>
 
 	@if ($errors->any())
     <div class="alert alert-danger">
@@ -15,25 +15,17 @@
     </div>
     @endif
 
-	<form method="POST" action="/receipe">
+	<form method="POST" action="/category">
 
 		{{ csrf_field() }}
 	  <div class="form-group">
-	    <label>Receipe Name</label>
+	    <label>Category Name</label>
 	    <input type="text" name="name" class="form-control" value="{{ old('name') }}" required>
 	  </div>
 
 	  <div class="form-group">
-	    <label for="exampleInputPassword1">Ingredients</label>
-	    <input type="text" name="ingredient" class="form-control" value="{{ old('ingredient') }}" required>
-	  </div>
-
-	  <div class="form-group">
-	  	<select class="form-control" name="category">
-	  		@foreach($category as $value)
-	  		<option value="{{$value->id}}">{{$value->name}}</option>
-	  		@endforeach
-	  	</select>	  	
+	    <label for="exampleInputPassword1">Description</label>
+	    <input type="text" name="description" class="form-control" value="{{ old('description') }}" required>
 	  </div>
 
 	  <button type="submit" class="btn btn-primary">Submit</button>

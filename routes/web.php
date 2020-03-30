@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Receipe;
+use App\category;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,15 +13,9 @@ use App\Receipe;
 | contains the "web" middleware group. Now create something great!
 |
 */
-// app()->bind('App\test',function(){
-// 	return new \App\test("something is happening right now!");
-// });
-// app()->bind('test',function(){
-// 	return new \App\test;
-// });
-// Route::get('/',function(){
-// 	dd(app('test'));
-// });
 Route::resource('receipe', 'ReceipeController');
 Route::get('home','HomeController@index');
+Route::get('/','PublicController@index');
+Route::get('detail/{id}','PublicController@show');
 Auth::routes();
+Route::resource('category', 'CategoryController');

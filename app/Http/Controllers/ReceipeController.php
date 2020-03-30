@@ -1,6 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\User;
+use App\Notifications\ReceipeUpdatedNotification;
+//use App\Notifications\ReceipeDeletedNotification;
+//use App\Notifications\ReceipeStoredNotification;
+use App\Events\ReceipeCreatedEvent;
 use App\Category;
 use App\Mail\ReceipeStore;
 use App\Receipe;
@@ -19,12 +24,16 @@ class ReceipeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
+
     {
-        // dd(app('test'));
-        // session(['key1'=>"value1"]);
-        // dd(session('key1'));
+        // $user = User::find(3);
+        // $user->notify(new ReceipeUpdatedNotification());
+        // echo 'send notification';
+        // exit();
         $data = Receipe::where('author_id',auth()->id())->get();
-        return view("home",compact('data'));
+        //$data = Receipe::all();
+        // $data = Receipe::paginate(10);
+        return view('home',compact('data'));
     }
 
     /**
@@ -53,6 +62,7 @@ class ReceipeController extends Controller
         ]);
 
         $receipe = Receipe::create($validatedData + ['author_id' => auth()->id()]);
+        // event(new ReceipeCreatedEvent($receipe));
         return redirect('receipe');
     }
 
@@ -64,8 +74,6 @@ class ReceipeController extends Controller
      */
     public function show(Receipe $receipe)
     {
-        // dd(app('test'));
-        // dd($test);
         $this->authorize('view',$receipe);
         return view('show',compact('receipe'));
     }
